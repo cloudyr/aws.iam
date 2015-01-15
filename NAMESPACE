@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+import(aws.signature)
+import(httr)
+importFrom(XML, xmlParse, xmlToList)
+importFrom(XML, fromJSON, toJSON)

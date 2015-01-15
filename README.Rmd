@@ -1,0 +1,28 @@
+# AWS IAM Client Package #
+
+**aws.iam** is a simple client package for the Amazon Web Services (AWS) [Identity and Access Management (IAM)](http://aws.amazon.com/iam/) API, which can be used to manage access credentials for AWS services.
+
+## Installation ##
+
+[![Build Status](https://travis-ci.org/cloudyr/aws.iam.png?branch=master)](https://travis-ci.org/cloudyr/aws.iam)
+
+To install the latest development version from GitHub, run the following:
+
+```R
+if(!require("devtools")){
+    install.packages("devtools")
+    library("devtools")
+}
+install_github("cloudyr/aws.iam")
+```
+
+To install the latest version from CRAN, simply use `install.packages("aws.iam")`.
+
+
+## Code Examples ##
+
+Coming soon...
+
+
+---
+[![cloudyr project logo](http://i.imgur.com/JHS98Y7.png)](https://github.com/cloudyr)
