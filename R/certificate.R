@@ -15,7 +15,7 @@ post_servercert <- function(file, name, privatekey, path, ...) {
     }
     r <- iamHTTP(query = query, 
                  verb = "POST",
-                 body = list(CertificateBody = upload_file(file), 
+                 body = list(CertificateBody = upload_file(file)), 
                  ...)
     return(r)
 }
@@ -72,7 +72,7 @@ post_signingcert <- function(file, user, ...) {
     }
     r <- iamHTTP(query = query, 
                  verb = "POST", 
-                 body = list(CertificateBody = upload_file(file), 
+                 body = list(CertificateBody = upload_file(file)), 
                  ...)
     return(r)
 }
@@ -82,7 +82,7 @@ update_signingcert <- function(cert, status, user, ...) {
     query <- list(Action = "UpdateSigningCertificate", CertificiateId = cert)
     vstatus <- c("Active", "Inactive")
     if(!status %in% vstatus)
-        stop("'status' must be one of: ", paste0(vstatus, collapse = ", ")
+        stop("'status' must be one of: ", paste0(vstatus, collapse = ", "))
     query$Status <- status
     if(!missing(user)){
         if(nchar(user) < 1 | nchar(user) > 128)

@@ -13,7 +13,7 @@ delete_mfa <- function(mfa, ...) {
 list_mfas <- function(n, marker, user, status, virtual = FALSE, ...) {
     if(virtual) {
         query <- list(Action = "ListVirtualMFADevices")
-        if(!missing(status))
+        if(!missing(status)) {
             vstatus <- c("Assigned", "Unassigned", "Any")
             if(!status %in% vstatus)
                 stop("'status' must be one of: ", paste0(status, collapse = ", "))
