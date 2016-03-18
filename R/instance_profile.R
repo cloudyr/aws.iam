@@ -1,40 +1,49 @@
+#' @export
 create_profile <- function(profile, path, ...){
     query <- list(Action = "CreateInstanceProfile", InstanceProfileName = profile)
-    if(!missing(path))
+    if (!missing(path)) {
         query$Path <- path
+    }
     iamHTTP(query = query, ...)
 }
 
+#' @export
 delete_profile <- function(profile, ...){
     query <- list(Action = "DeleteInstanceProfile", InstanceProfileName = profile)
     iamHTTP(query = query, ...)
 }
 
+#' @export
 get_profile <- function(profile, ...){
     query <- list(Action = "GetInstanceProfile", InstanceProfileName = profile)
     iamHTTP(query = query, ...)
 }
 
+#' @export
 list_profiles <- function(role, n, marker, prefix, ...) {
-    if(!missing(role)) {
+    if (!missing(role)) {
         query <- list(Action = "ListInstanceProfilesForRole", RoleName = role)
-        if(!missing(marker))
+        if (!missing(marker)) {
             query$Marker <- marker
-        if(!missing(n)) {
+        }
+        if (!missing(n)) {
             if(!n %in% 1:1e3)
                 stop("'n' must be in 1:1000")
             query$MaxItems <- n
         }
     } else {
         query <- list(Action = "ListInstanceProfiles")
-        if(!missing(prefix))
+        if (!missing(prefix)) {
             query$Prefix <- prefix
+        }
     }
-    if(!missing(marker))
+    if (!missing(marker)) {
         query$Marker <- marker
-    if(!missing(n)) {
-        if(!n %in% 1:1e3)
+    }
+    if (!missing(n)) {
+        if (!n %in% 1:1e3) {
             stop("'n' must be in 1:1000")
+        }
         query$MaxItems <- n
     }
     r <- iamHTTP(query = query, ...)
