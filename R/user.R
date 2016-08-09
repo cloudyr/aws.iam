@@ -1,7 +1,7 @@
 #' @export
-create_user <- function(user, path, ...){
+create_user <- function(user, path, ...) {
     query <- list(Action = "CreateUser")
-    if (!missing(user)){
+    if (!missing(user)) {
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")
         }
@@ -19,14 +19,14 @@ create_user <- function(user, path, ...){
 #' @export
 update_user <- function(user, name, path, ...) {
     query <- list(Action = "UpdateUser")
-    if (!missing(user)){
+    if (!missing(user)) {
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")
         }
         query$UserName <- user
     }
-    if (!missing(name)){
-        if (nchar(name) < 1 | nchar(name) > 128) []
+    if (!missing(name)) {
+        if (nchar(name) < 1 | nchar(name) > 128) {
             stop("'name' must be between 1 and 128 characters")
         }
         query$NewUserName <- name
@@ -41,7 +41,7 @@ update_user <- function(user, name, path, ...) {
 }
 
 #' @export
-get_user <- function(user, ...){
+get_user <- function(user, ...) {
     query <- list(Action = "GetUser")
     if (nchar(user) < 1 | nchar(user) > 128) {
         stop("'user' must be between 1 and 128 characters")
@@ -51,9 +51,9 @@ get_user <- function(user, ...){
 }
 
 #' @export
-delete_user <- function(user, ...){
+delete_user <- function(user, ...) {
     query <- list(Action = "DeleteUser")
-    if (!missing(user)){
+    if (!missing(user)) {
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")
         }
