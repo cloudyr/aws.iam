@@ -19,9 +19,9 @@ delete_user(user, ...)
 list_users(n, marker, path, ...)
 }
 \arguments{
-\item{user}{A character string or an object of class \dQuote{iam_user}.}
+\item{user}{A character string specifying a user name or an object of class \dQuote{iam_user}.}
 
-\item{path}{A character string specifying a path prefix in which to locate user(s).}
+\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc.}
 
 \item{name}{A character string specifying the new name for the user.}
 

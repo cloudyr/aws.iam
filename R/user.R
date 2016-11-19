@@ -1,8 +1,8 @@
 #' @rdname users
 #' @title Manage IAM Users
 #' @description Retrieve, create, update, and delete IAM Users
-#' @param user A character string or an object of class \dQuote{iam_user}.
-#' @param path A character string specifying a path prefix in which to locate user(s).
+#' @param user A character string specifying a user name or an object of class \dQuote{iam_user}.
+#' @template path
 #' @param name A character string specifying the new name for the user.
 #' @template n
 #' @template marker
