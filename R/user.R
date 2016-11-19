@@ -11,18 +11,16 @@
 #' @export
 create_user <- function(user, path, ...) {
     query <- list(Action = "CreateUser")
-    if (!missing(user)) {
-        user <- get_username(user)
-        if (nchar(user) < 1 | nchar(user) > 128) {
-            stop("'user' must be between 1 and 128 characters")
-        }
-        query$UserName <- user
+    user <- get_username(user)
+    if (nchar(user) < 1 | nchar(user) > 128) {
+        stop("'user' must be between 1 and 128 characters")
     }
+    query[["UserName"]] <- user
     if (!missing(path)) {
         if (nchar(path) > 512 | nchar(path) < 1) {
             stop("'path' must be between 1 and 512 characters")
         }
-        query$Path <- path
+        query[["Path"]] <- path
     }
     out <- iamHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
@@ -36,24 +34,22 @@ create_user <- function(user, path, ...) {
 #' @export
 update_user <- function(user, name, path, ...) {
     query <- list(Action = "UpdateUser")
-    if (!missing(user)) {
-        user <- get_username(user)
-        if (nchar(user) < 1 | nchar(user) > 128) {
-            stop("'user' must be between 1 and 128 characters")
-        }
-        query$UserName <- user
+    user <- get_username(user)
+    if (nchar(user) < 1 | nchar(user) > 128) {
+        stop("'user' must be between 1 and 128 characters")
     }
+    query[["UserName"]] <- user
     if (!missing(name)) {
         if (nchar(name) < 1 | nchar(name) > 128) {
             stop("'name' must be between 1 and 128 characters")
         }
-        query$NewUserName <- name
+        query[["NewUserName"]] <- name
     }
     if (!missing(path)) {
         if (nchar(path) > 512 | nchar(path) < 1) {
             stop("'path' must be between 1 and 512 characters")
         }
-        query$NewPath <- path
+        query[["NewPath"]] <- path
     }
     out <- iamHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
@@ -70,7 +66,7 @@ get_user <- function(user, ...) {
     if (nchar(user) < 1 | nchar(user) > 128) {
         stop("'user' must be between 1 and 128 characters")
     }
-    query$UserName <- user
+    query[["UserName"]] <- user
     out <- iamHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
         out <- structure(out[["GetUserResponse"]][["GetUserResult"]][["User"]],
@@ -87,7 +83,7 @@ delete_user <- function(user, ...) {
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")
         }
-        query$UserName <- user
+        query[["UserName"]] <- user
     }
     out <- iamHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
@@ -101,16 +97,16 @@ delete_user <- function(user, ...) {
 list_users <- function(n, marker, path, ...) {
     query <- list(Action = "ListUsers")
     if (!missing(marker)) {
-        query$Marker <- marker
+        query[["Marker"]] <- marker
     }
     if (!missing(path)) {
-        query$PathPrefix <- path
+        query[["PathPrefix"]] <- path
     }
     if (!missing(n)) {
         if (!n %in% 1:1e3) {
             stop("'n' must be in 1:1000")
         }
-        query$MaxItems <- n
+        query[["MaxItems"]] <- n
     }
     out <- iamHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {

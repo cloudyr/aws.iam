@@ -15,13 +15,13 @@ create_role <- function(role, policy, path, ...){
     if (nchar(role) < 1 | nchar(role) > 64) {
         stop("'role' must be between 1 and 64 characters")
     }
-    query$RoleName <- role
-    query$AssumeRolePolicyDocument <- policy
+    query[["RoleName"]] <- role
+    query[["AssumeRolePolicyDocument"]] <- policy
     if (!missing(path)) {
         if (nchar(path) > 512 | nchar(path) < 1) {
             stop("'path' must be between 1 and 512 characters")
         }
-        query$Path <- path
+        query[["Path"]] <- path
     }
     out <- iamHTTP(query = query, ...)
     out
@@ -35,8 +35,11 @@ delete_role <- function(role, ...){
     if (nchar(role) < 1 | nchar(role) > 64) {
         stop("'role' must be between 1 and 64 characters")
     }
-    query$RoleName <- role
+    query[["RoleName"]] <- role
     out <- iamHTTP(query = query, ...)
+    if (!inherits(out, "aws_error")) {
+        out <- TRUE
+    }
     out
 }
 
@@ -49,7 +52,7 @@ add_profile_role <- function(role, profile, ...) {
     if (nchar(role) < 1 | nchar(role) > 64) {
         stop("'role' must be between 1 and 64 characters")
     }
-    query$RoleName <- role
+    query[["RoleName"]] <- role
     out <- iamHTTP(query = query, ...)
     out
 }

@@ -84,6 +84,7 @@ list_keys <- function(user, n, marker, ...) {
             class(x) <- "iam_key"
             x
         })
+        attr(out, "marker") <- out[["ListAccessKeysResponse"]][["ListAccessKeysResult"]][["Marker"]]
     }
     out
 }
