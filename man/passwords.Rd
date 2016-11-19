@@ -2,9 +2,16 @@
 % Please edit documentation in R/passwords.R
 \name{change_pwd}
 \alias{change_pwd}
+\alias{get_pwd_policy}
+\alias{set_pwd_policy}
 \title{Change Password}
 \usage{
 change_pwd(old, new, ...)
+
+get_pwd_policy(...)
+
+set_pwd_policy(allowchange, hardexpire, age, length, previous, requirements,
+  ...)
 }
 \arguments{
 \item{old}{A character string specifying the current password}

@@ -22,6 +22,7 @@ change_pwd <- function(old, new, ...) {
     out
 }
 
+#' @rdname passwords
 #' @export
 get_pwd_policy <- function(...) {
     query <- list(Action = "GetAccountPasswordPolicy")
@@ -29,6 +30,7 @@ get_pwd_policy <- function(...) {
     out[["GetAccountPasswordPolicyResponse"]][["GetAccountPasswordPolicyResult"]][["PasswordPolicy"]]
 }
 
+#' @rdname passwords
 #' @export
 set_pwd_policy <- 
 function(allowchange, 
@@ -54,7 +56,7 @@ function(allowchange,
         if (length > 128 | length < 6) {
             stop("'length' must be between 6 and 128")
         }
-        query[["MinPasswordLength"]] <- min_length
+        query[["MinPasswordLength"]] <- length
     }
     if (!missing(previous)) {
         if (previous > 24 | age < 0) {

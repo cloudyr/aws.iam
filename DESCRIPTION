@@ -9,6 +9,7 @@ Description: A simple client package for the Amazon Web Services (AWS) Identity
     and Access Management (IAM) API.
 License: GPL (>= 2)
 Imports:
+    utils,
     httr,
     XML,
     jsonlite,

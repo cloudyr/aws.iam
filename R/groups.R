@@ -48,7 +48,7 @@ update_group <- function(group, name, path, ...) {
         if (nchar(path) > 512 | nchar(path) < 1) {
             stop("'path' must be between 1 and 512 characters")
         }
-        query[["NewPath"]] <- newpath
+        query[["NewPath"]] <- path
     }
     out <- iamHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
