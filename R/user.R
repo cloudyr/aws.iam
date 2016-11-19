@@ -1,7 +1,18 @@
+#' @rdname users
+#' @title Manage IAM Users
+#' @description Retrieve, create, update, and delete IAM Users
+#' @param user A character string or an object of class \dQuote{iam_user}.
+#' @param path A character string specifying a path prefix in which to locate user(s).
+#' @param name A character string specifying the new name for the user.
+#' @template n
+#' @template marker
+#' @template dots
+#' @return \code{create_user} and \code{get_user} return objects of class \dQuote{iam_user}. \code{update_user} and \code{delete_user} return a logical \code{TRUE} (if successful) or an error. \code{list_users} returns a list of IAM user objects.
 #' @export
 create_user <- function(user, path, ...) {
     query <- list(Action = "CreateUser")
     if (!missing(user)) {
+        user <- get_username(user)
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")
         }
@@ -13,13 +24,20 @@ create_user <- function(user, path, ...) {
         }
         query$Path <- path
     }
-    iamHTTP(query = query, ...)
+    out <- iamHTTP(query = query, ...)
+    if (!inherits(out, "aws_error")) {
+        out <- structure(out[["CreateUserResponse"]][["CreateUserResult"]][["User"]],
+                         class = "iam_user")
+    }
+    out
 }
 
+#' @rdname users
 #' @export
 update_user <- function(user, name, path, ...) {
     query <- list(Action = "UpdateUser")
     if (!missing(user)) {
+        user <- get_username(user)
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")
         }
@@ -37,19 +55,31 @@ update_user <- function(user, name, path, ...) {
         }
         query$NewPath <- path
     }
-    iamHTTP(query = query, ...)    
+    out <- iamHTTP(query = query, ...)
+    if (!inherits(out, "aws_error")) {
+        out <- TRUE
+    }
+    out  
 }
 
+#' @rdname users
 #' @export
 get_user <- function(user, ...) {
     query <- list(Action = "GetUser")
+    user <- get_username(user)
     if (nchar(user) < 1 | nchar(user) > 128) {
         stop("'user' must be between 1 and 128 characters")
     }
     query$UserName <- user
-    iamHTTP(query = query, ...)    
+    out <- iamHTTP(query = query, ...)
+    if (!inherits(out, "aws_error")) {
+        out <- structure(out[["GetUserResponse"]][["GetUserResult"]][["User"]],
+                         class = "iam_user")
+    }
+    out
 }
 
+#' @rdname users
 #' @export
 delete_user <- function(user, ...) {
     query <- list(Action = "DeleteUser")
@@ -59,17 +89,22 @@ delete_user <- function(user, ...) {
         }
         query$UserName <- user
     }
-    iamHTTP(query = query, ...)
+    out <- iamHTTP(query = query, ...)
+    if (!inherits(out, "aws_error")) {
+        out <- TRUE
+    }
+    out
 }
 
+#' @rdname users
 #' @export
-list_users <- function(n, marker, prefix, ...) {
+list_users <- function(n, marker, path, ...) {
     query <- list(Action = "ListUsers")
     if (!missing(marker)) {
         query$Marker <- marker
     }
-    if (!missing(prefix)) {
-        query$Prefix <- prefix
+    if (!missing(path)) {
+        query$PathPrefix <- path
     }
     if (!missing(n)) {
         if (!n %in% 1:1e3) {
@@ -77,5 +112,12 @@ list_users <- function(n, marker, prefix, ...) {
         }
         query$MaxItems <- n
     }
-    iamHTTP(query = query, ...)
+    out <- iamHTTP(query = query, ...)
+    if (!inherits(out, "aws_error")) {
+        check_truncation(out[["ListUsersResponse"]][["ListUsersResult"]][["IsTruncated"]])
+        users <- out[["ListUsersResponse"]][["ListUsersResult"]][["Users"]]
+        out <- structure(lapply(users, `class<-`, "iam_user"),
+                         marker = out[["ListUsersResponse"]][["ListUsersResult"]][["Marker"]])
+    }
+    out
 }
