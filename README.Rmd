@@ -1,6 +1,6 @@
 # AWS IAM Client Package #
 
-**aws.iam** is a simple client package for the Amazon Web Services (AWS) [Identity and Access Management (IAM)](http://aws.amazon.com/iam/) API, which can be used to manage access credentials for AWS services.
+**aws.iam** is a simple client package for the Amazon Web Services (AWS) [Identity and Access Management (IAM)](http://aws.amazon.com/iam/) and [Simple Token Service (STS)](http://docs.aws.amazon.com/STS/latest/APIReference) API, which can be used to manage access credentials for AWS services.
 
 To use the package, you will need an AWS account and enter your credentials into R. Your keypair can be generated on the [IAM Management Console](https://console.aws.amazon.com/iam/home?#security_credential) under the heading *Access Keys*. Note that you only have access to your secret key once. After it is generated, you need to save it in a secure location. New keypairs can be generated at any time if yours has been lost, stolen, or forgotten. 
 
@@ -22,7 +22,8 @@ Coming soon...
 ## Installation ##
 
 [![CRAN](http://www.r-pkg.org/badges/version/aws.iam)](http://cran.r-project.org/package=aws.iam)
-[![Build Status](https://travis-ci.org/cloudyr/aws.iam.png?branch=master)](https://travis-ci.org/cloudyr/aws.iam) [![codecov.io](http://codecov.io/github/cloudyr/aws.iam/coverage.svg?branch=master)](http://codecov.io/github/cloudyr/aws.iam?branch=master)
+[![Build Status](https://travis-ci.org/cloudyr/aws.iam.png?branch=master)](https://travis-ci.org/cloudyr/aws.iam)
+[![codecov.io](http://codecov.io/github/cloudyr/aws.iam/coverage.svg?branch=master)](http://codecov.io/github/cloudyr/aws.iam?branch=master)
 
 This package is not yet on CRAN. To install the latest development version you can install from the cloudyr drat repository:
 

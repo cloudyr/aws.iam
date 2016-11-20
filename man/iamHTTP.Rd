@@ -2,12 +2,20 @@
 % Please edit documentation in R/http.R
 \name{iamHTTP}
 \alias{iamHTTP}
-\title{Workhorse API Query Function}
+\alias{stsHTTP}
+\title{Workhorse API Query Functions}
 \usage{
 iamHTTP(query, verb = "GET", body = "", version = "2010-05-08",
   region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"),
   key = Sys.getenv("AWS_ACCESS_KEY_ID"),
-  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"), ...)
+  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
+  session_token = Sys.getenv("AWS_SESSION_TOKEN"), ...)
+
+stsHTTP(query, version = "2011-06-15",
+  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"),
+  key = Sys.getenv("AWS_ACCESS_KEY_ID"),
+  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
+  session_token = Sys.getenv("AWS_SESSION_TOKEN"), ...)
 }
 \arguments{
 \item{query}{A named list specifying query arguments.}
@@ -24,9 +32,11 @@ iamHTTP(query, verb = "GET", body = "", version = "2010-05-08",
 
 \item{secret}{A character string specifying an AWS Secret Key. The default is drawn from environment variable \env{AWS_SECRET_ACCESS_KEY}.}
 
+\item{session_token}{Optionally, a character string specifying an AWS temporary Session Token to use in signing a request. The default is drawn from environment variable \env{AWS_SESSION_TOKEN}.}
+
 \item{dots}{Additional arguments passed to \code{\link[httr]{GET}} or \code{\link[httr]{POST}}}
 }
 \description{
-This is the low-level API querying function for IAM. Users do not need to use this directly.
+These are the low-level API querying functions for IAM and STS. Users do not need to use these directly.
 }
 

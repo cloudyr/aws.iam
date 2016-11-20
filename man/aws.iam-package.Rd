@@ -6,10 +6,10 @@
 \alias{aws.iam-package}
 \title{aws.iam}
 \description{
-AWS IAM Client Package
+AWS IAM and STS Client Package
 }
 \details{
-A simple client package for the Amazon Web Services (AWS) Identity and Access Management (IAM) API.
+A simple client package for the Amazon Web Services (AWS) Identity and Access Management (IAM) and Simple Token Service (STS) APIs.
 }
 \author{
 Thomas J. Leeper <thosjleeper@gmail.com>

@@ -44,6 +44,14 @@ get_policyname <- function(x) {
     }
 }
 
+get_rolearn <- function(x) {
+    if (inherits(x, "iam_role")) {
+        x[["Arn"]]
+    } else {
+        x
+    }
+}
+
 get_rolename <- function(x) {
     if (inherits(x, "iam_role") | inherits(x, "iam_policy")) {
         x[["RoleName"]]
