@@ -8,7 +8,7 @@
 #' @param age Optionally, a number of days (between 1 and 1095) specifying maximum valid age of an IAM user password.
 #' @param length Optionally, a minimum password length between 6 and 128 (default is 6).
 #' @param previous Optionally, a number specifying the number (between 1 and 24) of previous passwords that users are prevented from reusing. Default is 0.
-#' @param require A character vector specifying whether to require specific password features, including: \dQuote{upper} (upper case character), \dQuote{lower} (lower case character), \dQuote{number} (a digit), and \dQuote{symbol} (a symbol). Multiple can be specified.
+#' @param requirements A character vector specifying whether to require specific password features, including: \dQuote{upper} (upper case character), \dQuote{lower} (lower case character), \dQuote{number} (a digit), and \dQuote{symbol} (a symbol). Multiple can be specified.
 #' @template dots
 #' @return \code{get_pwd_policy} returns a list. \code{change_pwd} and \code{set_pwd_policy} return a logical \code{TRUE} (if successful).
 #' @references \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html}{IAM Password Policies}

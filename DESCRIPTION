@@ -1,8 +1,8 @@
 Package: aws.iam
 Type: Package
 Title: AWS IAM Client Package
-Version: 0.1.4
-Date: 2016-11-20
+Version: 0.1.5
+Date: 2016-12-20
 Author: Thomas J. Leeper
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Description: A simple client package for the Amazon Web Services (AWS) Identity
@@ -11,9 +11,9 @@ License: GPL (>= 2)
 Imports:
     utils,
     httr,
-    XML,
+    xml2,
     jsonlite,
-    aws.signature
+    aws.signature (>= 0.2.6)
 URL: https://github.com/cloudyr/aws.iam
 BugReports: https://github.com/cloudyr/aws.iam/issues
 RoxygenNote: 5.0.1

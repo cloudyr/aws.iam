@@ -11,7 +11,7 @@
 #' @export
 create_key <- function(user, ...) {
     query <- list(Action = "CreateAccessKey")
-    user <-get_username(user)
+    user <- get_username(user)
     query$UserName <- user
     out <- iamHTTP(query = query, ...)
     out <- out[["CreateAccessKeyResponse"]][["CreateAccessKeyResult"]][["AccessKey"]]

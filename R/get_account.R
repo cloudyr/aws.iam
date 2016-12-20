@@ -28,7 +28,6 @@ credential_report <- function(...) {
 #' @param type An optional character string specifying one or more types of reports to return.
 #' @template n
 #' @template marker
-#' @template dots
 #' @export
 auth_details <- function(type, n, marker, ...) {
     query <- list(Action = "GetAccountAuthorizationDetails")

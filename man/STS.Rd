@@ -39,9 +39,9 @@ restore_credentials()
 
 \item{session}{A character string specifying the name of the temporary session.}
 
-\item{\dots}{Additional arguments passed to \code{\link{stsHTTP}}.}
+\item{externalid}{A unique identifier that is used by third parties when assuming roles in their customers' accounts.}
 
-\item{policy}{An IAM policy document in JSON format.}
+\item{\dots}{Additional arguments passed to \code{\link{stsHTTP}}.}
 }
 \value{
 A list.

@@ -3,6 +3,7 @@
 #' @description Retrieve, create, update, and delete IAM user groups
 #' @param group A character string containing a group name or an object of class \dQuote{iam_group}.
 #' @param name A character string specifying the new name for the group.
+#' @param user A character string specifying a user name.
 #' @template path
 #' @template n
 #' @template marker
@@ -104,14 +105,14 @@ get_group_users <- function(group, n, marker, ...) {
 
 #' @rdname groups
 #' @export
-list_groups <- function(user, n, marker, prefix, ...) {
+list_groups <- function(user, n, marker, path, ...) {
     if (!missing(user)) {
         query <- list(Action = "ListGroupsForUsers", UserName = user)
     } else {
         user <- NULL
         query <- list(Action = "ListGroups")
-        if (!missing(prefix)) {
-            query$Prefix <- prefix
+        if (!missing(path)) {
+            query$Prefix <- path
         }
     }
     if (!missing(marker)) {

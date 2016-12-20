@@ -23,7 +23,9 @@ list_roles(n, marker, path, ...)
 
 \item{policy}{\dots}
 
-\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc.}
+\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc. See \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html}{Reference Identifiers} on the AWS Documentation for more information.}
+
+\item{profile}{A character string specifying the name for the profile, or an object of class \dQuote{iam_instance_profile}.}
 
 \item{n}{An integer specifying the number of responses to return.}
 

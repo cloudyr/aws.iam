@@ -1,6 +1,6 @@
-#' @rdname login_profiles
-#' @title Instance Profiles
-#' @description Coming soon\dots
+# @rdname login_profiles
+# @title Instance Profiles
+# @description Coming soon\dots
 # @export
 create_login <- function(user, password, reset, ...){
     query <- list(Action = "CreateLoginProfile", 
@@ -15,7 +15,7 @@ create_login <- function(user, password, reset, ...){
     iamHTTP(query = query, ...)
 }
 
-#' @rdname login_profiles
+# @rdname login_profiles
 # @export
 update_login <- function(user, password, reset, ...){
     query <- list(Action = "UpdateLoginProfile", 
@@ -31,14 +31,14 @@ update_login <- function(user, password, reset, ...){
     iamHTTP(query = query, ...)
 }
 
-#' @rdname login_profiles
+# @rdname login_profiles
 # @export
 delete_login <- function(user, ...){
     query <- list(Action = "DeleteLoginProfile", UserName = user)
     iamHTTP(query = query, ...)
 }
 
-#' @rdname login_profiles
+# @rdname login_profiles
 # @export
 get_login <- function(user, ...){
     query <- list(Action = "GetLoginProfile", UserName = user)

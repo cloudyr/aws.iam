@@ -6,7 +6,6 @@
 #' @param role A character string containing a role name or an object of class \dQuote{iam_role}.
 #' @param policy A character string specifying the policy name.
 #' @param doc The contents of the policy document as a character string.
-#' @template path
 #' @template n
 #' @template marker
 #' @template dots

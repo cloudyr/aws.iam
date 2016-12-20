@@ -21,7 +21,7 @@ list_users(n, marker, path, ...)
 \arguments{
 \item{user}{A character string specifying a user name or an object of class \dQuote{iam_user}.}
 
-\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc.}
+\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc. See \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html}{Reference Identifiers} on the AWS Documentation for more information.}
 
 \item{name}{A character string specifying the new name for the user.}
 

@@ -14,5 +14,8 @@ A simple client package for the Amazon Web Services (AWS) Identity and Access Ma
 \author{
 Thomas J. Leeper <thosjleeper@gmail.com>
 }
+\references{
+\href{https://aws.amazon.com/documentation/iam/}{IAM Documentation}
+}
 \keyword{package}
 

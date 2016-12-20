@@ -20,8 +20,6 @@ auth_details(type, n, marker, ...)
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
 
 \item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 A list containing various account details.

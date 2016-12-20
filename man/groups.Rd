@@ -18,7 +18,7 @@ delete_group(group, ...)
 
 get_group_users(group, n, marker, ...)
 
-list_groups(user, n, marker, prefix, ...)
+list_groups(user, n, marker, path, ...)
 
 add_user(user, group, ...)
 
@@ -27,13 +27,15 @@ remove_user(user, group, ...)
 \arguments{
 \item{group}{A character string containing a group name or an object of class \dQuote{iam_group}.}
 
-\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc.}
+\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc. See \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html}{Reference Identifiers} on the AWS Documentation for more information.}
 
 \item{name}{A character string specifying the new name for the group.}
 
 \item{n}{An integer specifying the number of responses to return.}
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
+
+\item{user}{A character string specifying a user name.}
 
 \item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }

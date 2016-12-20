@@ -44,6 +44,14 @@ get_policyname <- function(x) {
     }
 }
 
+get_profilename <- function(x) {
+    if (inherits(x, "iam_instance_profile")) {
+        x[["InstanceProfileName"]]
+    } else {
+        x
+    }
+}
+
 get_rolearn <- function(x) {
     if (inherits(x, "iam_role")) {
         x[["Arn"]]
@@ -114,6 +122,26 @@ print.iam_policy <- function(x, ...) {
     }
     if (!is.null(x[["PolicyDocument"]])) {
         cat("policy:    ", x[["PolicyDocument"]], "\n")
+    }
+    invisible(x)
+}
+
+print.iam_instance_profile <- function(x, ...) {
+    if (!is.null(x[["InstanceProfileName"]])) {
+        cat("InstanceProfileName: ", paste0(x[["Path"]], x[["InstanceProfileName"]]), "\n")
+    }
+    if (!is.null(x[["InstanceProfileId"]])) {
+        cat("InstanceProfileId:   ", x[["InstanceProfileId"]], "\n")
+    }
+    if (!is.null(x[["Arn"]])) {
+        cat("Arn:                 ", x[["Arn"]], "\n")
+    }
+    if (!is.null(x[["CreateDate"]])) {
+        cat("CreateDate:          ", x[["CreateDate"]], "\n")
+    }
+    if (!is.null(x[["Roles"]])) {
+        cat("Roles:\n")
+        print(x[["Roles"]])
     }
     invisible(x)
 }

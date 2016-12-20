@@ -33,8 +33,6 @@ list_policies(user, group, role, n, marker, ...)
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
 
-\item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc.}
-
 \item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{

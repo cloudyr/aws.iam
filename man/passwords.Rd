@@ -28,7 +28,7 @@ set_pwd_policy(allowchange, hardexpire, age, length, previous, requirements,
 
 \item{previous}{Optionally, a number specifying the number (between 1 and 24) of previous passwords that users are prevented from reusing. Default is 0.}
 
-\item{require}{A character vector specifying whether to require specific password features, including: \dQuote{upper} (upper case character), \dQuote{lower} (lower case character), \dQuote{number} (a digit), and \dQuote{symbol} (a symbol). Multiple can be specified.}
+\item{requirements}{A character vector specifying whether to require specific password features, including: \dQuote{upper} (upper case character), \dQuote{lower} (lower case character), \dQuote{number} (a digit), and \dQuote{symbol} (a symbol). Multiple can be specified.}
 
 \item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }

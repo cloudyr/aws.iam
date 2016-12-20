@@ -1,1 +1,1 @@
-#' @param path A character string specifying a path prefix in which to locate user(s), role(s), etc.
+#' @param path A character string specifying a path prefix in which to locate user(s), role(s), etc. See \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html}{Reference Identifiers} on the AWS Documentation for more information.

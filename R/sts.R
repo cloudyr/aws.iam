@@ -53,7 +53,6 @@ get_session_token <- function(duration = 900, id, code, use = FALSE, ...) {
 
 #' @rdname STS
 #' @param name The name of the federated user.
-#' @param policy An IAM policy document in JSON format.
 #' @export
 get_federation_token <- function(duration = 900, name, policy, use = FALSE, ...) {
     check_saved_credentials(use)
@@ -89,6 +88,7 @@ get_caller_identity <- function(...) {
 }
 
 #' @rdname STS
+#' @param externalid A unique identifier that is used by third parties when assuming roles in their customers' accounts.
 #' @export
 assume_role <- function(role, session, duration = 900, id, code, externalid, policy, use = FALSE, ...) {
     check_saved_credentials(use)

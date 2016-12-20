@@ -3,6 +3,7 @@
 #' @description Retrieve, create, update, and delete IAM Roles
 #' @param role A character string containing a role name or an object of class \dQuote{iam_role}.
 #' @param policy \dots
+#' @template profile
 #' @template path
 #' @template n
 #' @template marker
@@ -47,7 +48,7 @@ delete_role <- function(role, ...){
 #' @export
 add_profile_role <- function(role, profile, ...) {
     query <- list(Action = "AddRoleToInstanceProfile", 
-                  InstanceProfileName = profile)
+                  InstanceProfileName = get_profilename(profile))
     role <- get_rolename(role)
     if (nchar(role) < 1 | nchar(role) > 64) {
         stop("'role' must be between 1 and 64 characters")
@@ -61,7 +62,7 @@ add_profile_role <- function(role, profile, ...) {
 #' @export
 remove_profile_role <- function(role, profile, ...) {
     query <- list(Action = "RemoveRoleFromInstanceProfile", 
-                  InstanceProfileName = profile)
+                  InstanceProfileName = get_profilename(profile))
     role <- get_rolename(role)
     if (nchar(role) < 1 | nchar(role) > 64) {
         stop("'role' must be between 1 and 64 characters")
