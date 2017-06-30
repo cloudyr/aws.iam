@@ -20,13 +20,13 @@ list_profiles(role, n, marker, path, ...)
 
 \item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc. See \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html}{Reference Identifiers} on the AWS Documentation for more information.}
 
+\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
+
 \item{role}{A character string containing a role name or an object of class \dQuote{iam_role}.}
 
 \item{n}{An integer specifying the number of responses to return.}
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 An object of class \dQuote{iam_instance_profile}.
@@ -41,4 +41,3 @@ Create, retrieve, list, and delete EC2 Instance Profiles
   \href{http://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html}{API Documentation: GetInstanceProfile}
   \href{http://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html}{API Documentation: ListInstanceProfiles}
 }
-

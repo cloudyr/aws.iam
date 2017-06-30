@@ -5,10 +5,10 @@
 #' @param version A character string specifying an API version. Default is \dQuote{2010-05-08}.
 #' @param verb A character string specifying an HTTP verb. Either \dQuote{GET} or \dQuote{POST}.
 #' @param body A character string specifying a request body (if \code{verb = "POST"}).
-#' @param region A character string specifying an AWS region. The default is drawn from environment variable \env{AWS_DEFAULT_REGION}.
-#' @param key A character string specifying an AWS Access Key. The default is drawn from environment variable \env{AWS_ACCESS_KEY_ID}.
-#' @param secret A character string specifying an AWS Secret Key. The default is drawn from environment variable \env{AWS_SECRET_ACCESS_KEY}.
-#' @param session_token Optionally, a character string specifying an AWS temporary Session Token to use in signing a request. The default is drawn from environment variable \env{AWS_SESSION_TOKEN}.
+#' @param region A character string specifying an AWS region. See \code{\link[aws.signature]{locate_credentials}}.
+#' @param key A character string specifying an AWS Access Key. See \code{\link[aws.signature]{locate_credentials}}.
+#' @param secret A character string specifying an AWS Secret Key. See \code{\link[aws.signature]{locate_credentials}}.
+#' @param session_token Optionally, a character string specifying an AWS temporary Session Token to use in signing a request. See \code{\link[aws.signature]{locate_credentials}}.
 #' @param \dots Additional arguments passed to \code{\link[httr]{GET}} or \code{\link[httr]{POST}}
 #' @import httr
 #' @importFrom aws.signature signature_v4_auth
@@ -19,10 +19,10 @@ iamHTTP <- function(query,
                     verb = "GET", 
                     body = "", 
                     version = "2010-05-08",
-                    region = Sys.getenv("AWS_DEFAULT_REGION"), 
-                    key = Sys.getenv("AWS_ACCESS_KEY_ID"), 
-                    secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"), 
-                    session_token = Sys.getenv("AWS_SESSION_TOKEN"),
+                    region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), 
+                    key = NULL, 
+                    secret = NULL, 
+                    session_token = NULL,
                     ...) {
     if (!"Version" %in% names(query)) {
         query[["Version"]] <- version
@@ -80,10 +80,10 @@ iamHTTP <- function(query,
 #' @export
 stsHTTP <- function(query, 
                     version = "2011-06-15",
-                    region = Sys.getenv("AWS_DEFAULT_REGION"), 
-                    key = Sys.getenv("AWS_ACCESS_KEY_ID"), 
-                    secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"), 
-                    session_token = Sys.getenv("AWS_SESSION_TOKEN"),
+                    region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), 
+                    key = NULL, 
+                    secret = NULL, 
+                    session_token = NULL,
                     ...) {
     if (!"Version" %in% names(query)) {
         query[["Version"]] <- version
@@ -112,7 +112,7 @@ stsHTTP <- function(query,
     H <- do.call(add_headers, headers)
 
     r <- GET(paste0("https://sts.amazonaws.com"), H, query = query, ...)
-    if (http_status(r)$category == "Client error") {
+    if (http_error(r)) {
         x <- try(as_list(read_xml(content(r, "text", encoding = "UTF-8"))), silent = TRUE)
         if (inherits(x, "try-error")) {
             x <- try(fromJSON(content(r, "text", encoding = "UTF-8"))$Error, silent = TRUE)

@@ -6,16 +6,12 @@
 \title{Workhorse API Query Functions}
 \usage{
 iamHTTP(query, verb = "GET", body = "", version = "2010-05-08",
-  region = Sys.getenv("AWS_DEFAULT_REGION"),
-  key = Sys.getenv("AWS_ACCESS_KEY_ID"),
-  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
-  session_token = Sys.getenv("AWS_SESSION_TOKEN"), ...)
+  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), key = NULL,
+  secret = NULL, session_token = NULL, ...)
 
 stsHTTP(query, version = "2011-06-15",
-  region = Sys.getenv("AWS_DEFAULT_REGION"),
-  key = Sys.getenv("AWS_ACCESS_KEY_ID"),
-  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
-  session_token = Sys.getenv("AWS_SESSION_TOKEN"), ...)
+  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), key = NULL,
+  secret = NULL, session_token = NULL, ...)
 }
 \arguments{
 \item{query}{A named list specifying query arguments.}
@@ -26,17 +22,16 @@ stsHTTP(query, version = "2011-06-15",
 
 \item{version}{A character string specifying an API version. Default is \dQuote{2010-05-08}.}
 
-\item{region}{A character string specifying an AWS region. The default is drawn from environment variable \env{AWS_DEFAULT_REGION}.}
+\item{region}{A character string specifying an AWS region. See \code{\link[aws.signature]{locate_credentials}}.}
 
-\item{key}{A character string specifying an AWS Access Key. The default is drawn from environment variable \env{AWS_ACCESS_KEY_ID}.}
+\item{key}{A character string specifying an AWS Access Key. See \code{\link[aws.signature]{locate_credentials}}.}
 
-\item{secret}{A character string specifying an AWS Secret Key. The default is drawn from environment variable \env{AWS_SECRET_ACCESS_KEY}.}
+\item{secret}{A character string specifying an AWS Secret Key. See \code{\link[aws.signature]{locate_credentials}}.}
 
-\item{session_token}{Optionally, a character string specifying an AWS temporary Session Token to use in signing a request. The default is drawn from environment variable \env{AWS_SESSION_TOKEN}.}
+\item{session_token}{Optionally, a character string specifying an AWS temporary Session Token to use in signing a request. See \code{\link[aws.signature]{locate_credentials}}.}
 
 \item{\dots}{Additional arguments passed to \code{\link[httr]{GET}} or \code{\link[httr]{POST}}}
 }
 \description{
 These are the low-level API querying functions for IAM and STS. Users do not need to use these directly.
 }
-

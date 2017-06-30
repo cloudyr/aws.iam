@@ -2,8 +2,8 @@
 % Please edit documentation in R/aws.iam-package.R
 \docType{package}
 \name{aws.iam-package}
-\alias{aws.iam}
 \alias{aws.iam-package}
+\alias{aws.iam}
 \title{aws.iam}
 \description{
 AWS IAM and STS Client Package
@@ -11,11 +11,10 @@ AWS IAM and STS Client Package
 \details{
 A simple client package for the Amazon Web Services (AWS) Identity and Access Management (IAM) and Simple Token Service (STS) APIs.
 }
-\author{
-Thomas J. Leeper <thosjleeper@gmail.com>
-}
 \references{
 \href{https://aws.amazon.com/documentation/iam/}{IAM Documentation}
 }
+\author{
+Thomas J. Leeper <thosjleeper@gmail.com>
+}
 \keyword{package}
-

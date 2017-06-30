@@ -18,6 +18,8 @@ set_pwd_policy(allowchange, hardexpire, age, length, previous, requirements,
 
 \item{new}{A character string specifying the new password}
 
+\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
+
 \item{allowchange}{Optionally, a logical indicating whether to allow users to change their own passwords (default is \code{FALSE}).}
 
 \item{hardexpire}{Optionally, a logical indicating whether to prevent users from changing their passwords after they expire (default is \code{FALSE}).}
@@ -29,8 +31,6 @@ set_pwd_policy(allowchange, hardexpire, age, length, previous, requirements,
 \item{previous}{Optionally, a number specifying the number (between 1 and 24) of previous passwords that users are prevented from reusing. Default is 0.}
 
 \item{requirements}{A character vector specifying whether to require specific password features, including: \dQuote{upper} (upper case character), \dQuote{lower} (lower case character), \dQuote{number} (a digit), and \dQuote{symbol} (a symbol). Multiple can be specified.}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 \code{get_pwd_policy} returns a list. \code{change_pwd} and \code{set_pwd_policy} return a logical \code{TRUE} (if successful).
@@ -41,4 +41,3 @@ Change password for currently authenticated user
 \references{
 \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html}{IAM Password Policies}
 }
-

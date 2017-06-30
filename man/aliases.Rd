@@ -15,11 +15,11 @@ list_aliases(n, marker, ...)
 \arguments{
 \item{alias}{A character string specifying an alias, or an object of class \dQuote{iam_alias}.}
 
+\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
+
 \item{n}{An integer specifying the number of responses to return.}
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 \code{create_alias} and \code{delete_alias} return a logical \code{TRUE} (if successful). \code{list_aliases} returns a list of objects of class \dQuote{iam_alias}.
@@ -30,4 +30,3 @@ Retrieve, create, update, and delete IAM Account Aliases
 \references{
 \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html}{AWS Account Aliases}
 }
-

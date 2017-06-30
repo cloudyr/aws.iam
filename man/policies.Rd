@@ -2,10 +2,10 @@
 % Please edit documentation in R/policy.R
 \name{add_policy}
 \alias{add_policy}
-\alias{delete_policy}
-\alias{get_policy}
-\alias{list_policies}
 \alias{update_policy}
+\alias{get_policy}
+\alias{delete_policy}
+\alias{list_policies}
 \title{Manage IAM Polices}
 \usage{
 add_policy(user, group, role, policy, doc, ...)
@@ -29,11 +29,11 @@ list_policies(user, group, role, n, marker, ...)
 
 \item{doc}{The contents of the policy document as a character string.}
 
+\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
+
 \item{n}{An integer specifying the number of responses to return.}
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 \code{add_policy} and \code{get_policy} return objects of class \dQuote{iam_policy}. \code{update_policy} and \code{delete_policy} return a logical \code{TRUE} (if successful) or an error. \code{list_policies} returns a list of IAM role objects.
@@ -41,4 +41,3 @@ list_policies(user, group, role, n, marker, ...)
 \description{
 Retrieve, create, update, and delete IAM Role, User, and Group Polices
 }
-

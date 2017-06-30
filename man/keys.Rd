@@ -2,9 +2,9 @@
 % Please edit documentation in R/accesskey.R
 \name{create_key}
 \alias{create_key}
+\alias{update_key}
 \alias{delete_key}
 \alias{list_keys}
-\alias{update_key}
 \title{Manage Access Keys/Credentials}
 \usage{
 create_key(user, ...)
@@ -18,6 +18,8 @@ list_keys(user, n, marker, ...)
 \arguments{
 \item{user}{Optionally, a character string specifying a user name or an object of class \dQuote{iam_user}. This will be retrieved by default from the \dQuote{UserName} list entry in \code{key}, if available; otherwise the user is assumed to be the user whose credentials are being used to execute the request.}
 
+\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
+
 \item{key}{A character string specifying an access key or an object of class \dQuote{iam_key}.}
 
 \item{status}{A character string specifying either \dQuote{Active} or \dQuote{Inactive} to status the key status to.}
@@ -25,8 +27,6 @@ list_keys(user, n, marker, ...)
 \item{n}{An integer specifying the number of responses to return.}
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 \code{create_user} and \code{get_user} return objects of class \dQuote{iam_user}. \code{update_user} and \code{delete_user} return a logical \code{TRUE} (if successful) or an error. \code{list_users} returns a list of IAM user objects.
@@ -34,4 +34,3 @@ list_keys(user, n, marker, ...)
 \description{
 Retrieve, create, update, and delete IAM access keys
 }
-

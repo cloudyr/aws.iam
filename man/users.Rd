@@ -2,10 +2,10 @@
 % Please edit documentation in R/user.R
 \name{create_user}
 \alias{create_user}
-\alias{delete_user}
-\alias{get_user}
-\alias{list_users}
 \alias{update_user}
+\alias{get_user}
+\alias{delete_user}
+\alias{list_users}
 \title{Manage IAM Users}
 \usage{
 create_user(user, path, ...)
@@ -23,13 +23,13 @@ list_users(n, marker, path, ...)
 
 \item{path}{A character string specifying a path prefix in which to locate user(s), role(s), etc. See \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html}{Reference Identifiers} on the AWS Documentation for more information.}
 
+\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
+
 \item{name}{A character string specifying the new name for the user.}
 
 \item{n}{An integer specifying the number of responses to return.}
 
 \item{marker}{A character string specifying a marker (from a previous response) to use in paginating results}
-
-\item{\dots}{Additional arguments passed to \code{\link{iamHTTP}}.}
 }
 \value{
 \code{create_user} and \code{get_user} return objects of class \dQuote{iam_user}. \code{update_user} and \code{delete_user} return a logical \code{TRUE} (if successful) or an error. \code{list_users} returns a list of IAM user objects.
@@ -37,4 +37,3 @@ list_users(n, marker, path, ...)
 \description{
 Retrieve, create, update, and delete IAM Users
 }
-
