@@ -34,7 +34,117 @@ Temporary session tokens are stored in environment variable `AWS_SESSION_TOKEN` 
 
 ## Code Examples
 
-Coming soon...
+The package gives basically fully access to IAM functionality to create and manage groups and users, including creating and managing AWS credentials on-the-fly.
+
+
+```r
+library("aws.iam")
+
+# create user
+u <- create_user("example-user")
+
+# create group
+(g <- create_group("example"))
+```
+
+```
+## GroupId:    AGPAIZHQL3T5B4GGXXVGU 
+## GroupName:  /example 
+## Arn:        arn:aws:iam::920667304251:group/example 
+## CreateDate: 1498901165
+```
+
+```r
+# rename group
+update_group(g, "example2")
+```
+
+```
+## [1] TRUE
+```
+
+```r
+# add user to group
+add_user(u, "example2")
+```
+
+```
+## [1] TRUE
+```
+
+```r
+get_group_users("example2")
+```
+
+```
+## [[1]]
+## UserName:   /example-user 
+## UserId:     AIDAI54ZINZ2F3NUVS4XW 
+## Arn:        arn:aws:iam::920667304251:user/example-user 
+## CreateDate: 1498901164 
+## 
+## attr(,"group")
+## GroupId:    AGPAIZHQL3T5B4GGXXVGU 
+## GroupName:  /example2 
+## Arn:        arn:aws:iam::920667304251:group/example2 
+## CreateDate: 1498901165
+```
+
+```r
+# create AWS credentials for user
+k <- create_key(u)
+# update key to inactive
+update_key(k, u, "Inactive")
+```
+
+```
+## [1] TRUE
+```
+
+```r
+list_keys(u)
+```
+
+```
+## [[1]]
+## AccessKeyId: AKIAIUSX3NZJVKNGNTRA 
+## CreateDate:  1498901167 
+## Status:      Inactive 
+## UserName:    example-user
+```
+
+```r
+# cleanup
+delete_key(k)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+remove_user(u, "example2")
+```
+
+```
+## [1] TRUE
+```
+
+```r
+delete_user(u)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+delete_group("example2")
+```
+
+```
+## [1] TRUE
+```
 
 ## Installation
 

@@ -1,3 +1,7 @@
+# CHANGES TO aws.iam 0.1.6
+
+* Expanded documentation.
+
 # CHANGES TO aws.iam 0.1.5
 
 * Bump **aws.signature** dependency to 0.3.4.

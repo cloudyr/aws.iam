@@ -8,6 +8,16 @@
 #' @template marker
 #' @template dots
 #' @return \code{create_user} and \code{get_user} return objects of class \dQuote{iam_user}. \code{update_user} and \code{delete_user} return a logical \code{TRUE} (if successful) or an error. \code{list_users} returns a list of IAM user objects.
+#' @examples
+#' \dontrun{
+#' list_users()
+#' 
+#' # create example user
+#' u <- create_user("example-user")
+#' 
+#' # cleanup
+#' delete_user(u)
+#' }
 #' @export
 create_user <- function(user, path, ...) {
     query <- list(Action = "CreateUser")
@@ -79,6 +89,7 @@ get_user <- function(user, ...) {
 #' @export
 delete_user <- function(user, ...) {
     query <- list(Action = "DeleteUser")
+    user <- get_username(user)
     if (!missing(user)) {
         if (nchar(user) < 1 | nchar(user) > 128) {
             stop("'user' must be between 1 and 128 characters")

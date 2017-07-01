@@ -34,3 +34,24 @@ list_keys(user, n, marker, ...)
 \description{
 Retrieve, create, update, and delete IAM access keys
 }
+\examples{
+\dontrun{
+# list access keys
+list_keys()
+
+# create a user key
+u <- create_user("example-user")
+str(k <- create_key(u))
+
+# toggle key status to inactive
+update_key(k, u, "Inactive")
+list_keys(u)
+
+# cleanup
+delete_key(k)
+delete_user(u)
+}
+}
+\seealso{
+\code{\link{create_user}}
+}

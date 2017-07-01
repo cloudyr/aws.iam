@@ -37,3 +37,14 @@ list_users(n, marker, path, ...)
 \description{
 Retrieve, create, update, and delete IAM Users
 }
+\examples{
+\dontrun{
+list_users()
+
+# create example user
+u <- create_user("example-user")
+
+# cleanup
+delete_user(u)
+}
+}

@@ -8,6 +8,24 @@
 #' @template marker
 #' @template dots
 #' @return \code{create_user} and \code{get_user} return objects of class \dQuote{iam_user}. \code{update_user} and \code{delete_user} return a logical \code{TRUE} (if successful) or an error. \code{list_users} returns a list of IAM user objects.
+#' @examples
+#' \dontrun{
+#' # list access keys
+#' list_keys()
+#' 
+#' # create a user key
+#' u <- create_user("example-user")
+#' str(k <- create_key(u))
+#' 
+#' # toggle key status to inactive
+#' update_key(k, u, "Inactive")
+#' list_keys(u)
+#' 
+#' # cleanup
+#' delete_key(k)
+#' delete_user(u)
+#' }
+#' @seealso \code{\link{create_user}}
 #' @export
 create_key <- function(user, ...) {
     query <- list(Action = "CreateAccessKey")

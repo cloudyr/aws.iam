@@ -56,7 +56,7 @@ iamHTTP <- function(query,
     } else if (verb == "POST") {
         r <- POST(paste0("https://iam.amazonaws.com"), H, query = query, body = body, ...)
     }
-    if (http_status(r)$category == "Client error") {
+    if (http_error(r)) {
         x <- try(as_list(read_xml(content(r, "text", encoding = "UTF-8"))), silent = TRUE)
         if (inherits(x, "try-error")) {
             x <- try(fromJSON(content(r, "text", encoding = "UTF-8"))$Error, silent = TRUE)

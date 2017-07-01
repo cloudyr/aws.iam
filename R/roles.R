@@ -9,6 +9,7 @@
 #' @template marker
 #' @template dots
 #' @return \code{create_role} and \code{get_role} return objects of class \dQuote{iam_role}. \code{update_role} and \code{delete_role} return a logical \code{TRUE} (if successful) or an error. \code{list_roles} returns a list of IAM role objects.
+#' @seealso \code{\link{create_user}}, \code{\link{create_group}}, 
 #' @export
 create_role <- function(role, policy, path, ...){
     query <- list(Action = "CreateRole")

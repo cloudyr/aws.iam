@@ -34,7 +34,35 @@ Temporary session tokens are stored in environment variable `AWS_SESSION_TOKEN` 
 
 ## Code Examples
 
-Coming soon...
+The package gives basically fully access to IAM functionality to create and manage groups and users, including creating and managing AWS credentials on-the-fly.
+
+```{r}
+library("aws.iam")
+
+# create user
+u <- create_user("example-user")
+
+# create group
+(g <- create_group("example"))
+# rename group
+update_group(g, "example2")
+
+# add user to group
+add_user(u, "example2")
+get_group_users("example2")
+
+# create AWS credentials for user
+k <- create_key(u)
+# update key to inactive
+update_key(k, u, "Inactive")
+list_keys(u)
+
+# cleanup
+delete_key(k)
+remove_user(u, "example2")
+delete_user(u)
+delete_group("example2")
+```
 
 ## Installation
 

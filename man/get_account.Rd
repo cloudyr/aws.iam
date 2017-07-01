@@ -30,3 +30,12 @@ Retrieve IAM Account Details. This is useful as a \dQuote{hello world!} test.
 \details{
 \code{get_account} returns a list of account details. \code{credential_report} generates and/or retrieves a credential report. \code{auth_details} returns a list of group, user, role, and policy details.
 }
+\examples{
+\dontrun{
+# account details
+get_aaccount()
+
+# big list of authorizations
+auth_details()
+}
+}

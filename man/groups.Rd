@@ -45,3 +45,29 @@ remove_user(user, group, ...)
 \description{
 Retrieve, create, update, and delete IAM user groups
 }
+\examples{
+\dontrun{
+ list_groups()
+
+# create group
+(g <- create_group("example"))
+# rename
+update_group(g, "example2")
+list_groups()
+
+# create example user
+u <- create_user("example-user")
+# add user to group
+add_user(u, "example2")
+
+get_group_users("example2")
+
+# cleanup
+remove_user(u, "example2")
+delete_user(u)
+delete_group("example2")
+}
+}
+\seealso{
+\code{\link{create_user}}, \code{\link{create_role}},
+}

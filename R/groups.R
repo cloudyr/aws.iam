@@ -9,6 +9,29 @@
 #' @template marker
 #' @template dots
 #' @return \code{create_group} and \code{get_group} return objects of class \dQuote{iam_group}. \code{update_group} and \code{delete_group}, \code{add_user}, and \code{remove_user} return a logical \code{TRUE} (if successful) or an error. \code{list_groups} returns a list of IAM group objects. \code{get_group_users} returns a list of objects of class \dQuote{iam_user}, with a \dQuote{iam_group} attribute.
+#' @examples
+#' \dontrun{
+#'  list_groups()
+#' 
+#' # create group
+#' (g <- create_group("example"))
+#' # rename
+#' update_group(g, "example2")
+#' list_groups()
+#' 
+#' # create example user
+#' u <- create_user("example-user")
+#' # add user to group
+#' add_user(u, "example2")
+#' 
+#' get_group_users("example2")
+#' 
+#' # cleanup
+#' remove_user(u, "example2")
+#' delete_user(u)
+#' delete_group("example2")
+#' }
+#' @seealso \code{\link{create_user}}, \code{\link{create_role}}, 
 #' @export
 create_group <- function(group, path, ...){
     query <- list(Action = "CreateGroup")
@@ -107,6 +130,7 @@ get_group_users <- function(group, n, marker, ...) {
 #' @export
 list_groups <- function(user, n, marker, path, ...) {
     if (!missing(user)) {
+        user <- get_username(user)
         query <- list(Action = "ListGroupsForUsers", UserName = user)
     } else {
         user <- NULL

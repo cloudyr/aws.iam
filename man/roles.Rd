@@ -39,3 +39,6 @@ list_roles(n, marker, path, ...)
 \description{
 Retrieve, create, update, and delete IAM Roles
 }
+\seealso{
+\code{\link{create_user}}, \code{\link{create_group}},
+}
