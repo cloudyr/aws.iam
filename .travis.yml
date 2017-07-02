@@ -1,14 +1,40 @@
 language: r
 sudo: false
 cache: packages
+matrix:
+  include:
+    - os: linux
+      dist: precise
+      sudo: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: R_CODECOV=true
+    - os: osx
+      osx_image: xcode8.2
+      before_install:
+        - brew install curl
+        - brew link --force curl
+      latex: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
+    - os: osx
+      osx_image: xcode7.3
+      latex: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
 r_packages:
-- knitr
 - covr
 - drat
+r_github_packages:
+- cloudyr/travisci
 after_success:
 - Rscript -e 'library("covr");codecov()'
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash
   drat.sh
+- Rscript -e "travisci::restart_last_build('cloudyr/awspack')"
 env:
   global:
     secure: YacWee//5E1lh6x5CPx5EHmE0d+CTMFWz7vOiQigAr/L0rAerxWneBulpRO8hw7F6vGJopC4197QJrff8KoVbCElEOq1yLeokvWnVY+7xtmKp/hhXxtJrF8120wKObI0/LVZ3NuSwSY/WXccn93Yhzf9N0xQXD8SKv26v1ck7oA=
