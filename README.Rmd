@@ -81,10 +81,10 @@ install.packages("aws.iam", repos = c(cloudyr = "http://cloudyr.github.io/drat",
 Or, to pull a potentially unstable version directly from GitHub:
 
 ```R
-if (!require("ghit")) {
-    install.packages("ghit")
+if (!require("remotes")) {
+    install.packages("remotes")
 }
-ghit::install_github("cloudyr/aws.iam")
+remotes::install_github("cloudyr/aws.iam")
 ```
 
 To install the latest version from CRAN, simply use `install.packages("aws.iam")`.
