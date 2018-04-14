@@ -5,22 +5,28 @@
 \alias{stsHTTP}
 \title{Workhorse API Query Functions}
 \usage{
-iamHTTP(query, verb = "GET", body = "", version = "2010-05-08",
+iamHTTP(verb = "GET", query, headers = list(), body = "",
+  version = "2010-05-08", verbose = getOption("verbose", FALSE),
   region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), key = NULL,
   secret = NULL, session_token = NULL, ...)
 
-stsHTTP(query, version = "2011-06-15",
+stsHTTP(query, headers = list(), body = "", version = "2011-06-15",
+  verbose = getOption("verbose", FALSE),
   region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), key = NULL,
   secret = NULL, session_token = NULL, ...)
 }
 \arguments{
+\item{verb}{A character string specifying an HTTP verb. Either \dQuote{GET} or \dQuote{POST}.}
+
 \item{query}{A named list specifying query arguments.}
 
-\item{verb}{A character string specifying an HTTP verb. Either \dQuote{GET} or \dQuote{POST}.}
+\item{headers}{A list of headers to pass to the HTTP request.}
 
 \item{body}{A character string specifying a request body (if \code{verb = "POST"}).}
 
 \item{version}{A character string specifying an API version. Default is \dQuote{2010-05-08}.}
+
+\item{verbose}{A logical indicating whether to be verbose. Default is given by \code{options("verbose")}.}
 
 \item{region}{A character string specifying an AWS region. See \code{\link[aws.signature]{locate_credentials}}.}
 
