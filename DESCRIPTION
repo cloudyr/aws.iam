@@ -1,12 +1,12 @@
 Package: aws.iam
-Type: Package
 Title: AWS IAM Client Package
-Version: 0.1.7
-Date: 2017-07-01
-Authors@R: c(person("Thomas J.", "Leeper", role = c("aut"),
+Version: 0.1.8
+Authors@R: c(person("Thomas J.", "Leeper", role = "aut",
                     email = "thosjleeper@gmail.com",
-                    comment = c(ORCID = "0000-0003-4097-6326")))
-Maintainer: ORPHANED
+                    comment = c(ORCID = "0000-0003-4097-6326")),
+             person("Simon", "Urbanek", role = c("cre", "ctb"),
+                    email = "simon.urbanek@R-project.org")
+            )
 Description: A simple client for the Amazon Web Services ('AWS') Identity
     and Access Management ('IAM') 'API' <https://aws.amazon.com/iam/>.
 License: GPL (>= 2)
