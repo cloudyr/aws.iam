@@ -15,8 +15,17 @@ get_federation_token(duration = 900, name, policy, use = FALSE, ...)
 
 get_caller_identity(...)
 
-assume_role(role, session, duration = 900, id, code, externalid, policy,
-  use = FALSE, ...)
+assume_role(
+  role,
+  session,
+  duration = 900,
+  id,
+  code,
+  externalid,
+  policy,
+  use = FALSE,
+  ...
+)
 
 delete_saved_credentials()
 

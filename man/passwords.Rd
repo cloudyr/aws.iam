@@ -10,8 +10,15 @@ change_pwd(old, new, ...)
 
 get_pwd_policy(...)
 
-set_pwd_policy(allowchange, hardexpire, age, length, previous, requirements,
-  ...)
+set_pwd_policy(
+  allowchange,
+  hardexpire,
+  age,
+  length,
+  previous,
+  requirements,
+  ...
+)
 }
 \arguments{
 \item{old}{A character string specifying the current password}

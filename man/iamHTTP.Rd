@@ -5,15 +5,32 @@
 \alias{stsHTTP}
 \title{Workhorse API Query Functions}
 \usage{
-iamHTTP(verb = "GET", query, headers = list(), body = "",
-  version = "2010-05-08", verbose = getOption("verbose", FALSE),
-  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), key = NULL,
-  secret = NULL, session_token = NULL, ...)
-
-stsHTTP(query, headers = list(), body = "", version = "2011-06-15",
+iamHTTP(
+  verb = "GET",
+  query,
+  headers = list(),
+  body = "",
+  version = "2010-05-08",
   verbose = getOption("verbose", FALSE),
-  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"), key = NULL,
-  secret = NULL, session_token = NULL, ...)
+  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"),
+  key = NULL,
+  secret = NULL,
+  session_token = NULL,
+  ...
+)
+
+stsHTTP(
+  query,
+  headers = list(),
+  body = "",
+  version = "2011-06-15",
+  verbose = getOption("verbose", FALSE),
+  region = Sys.getenv("AWS_DEFAULT_REGION", "us-east-1"),
+  key = NULL,
+  secret = NULL,
+  session_token = NULL,
+  ...
+)
 }
 \arguments{
 \item{verb}{A character string specifying an HTTP verb. Either \dQuote{GET} or \dQuote{POST}.}
