@@ -87,7 +87,7 @@ get_session_token <- function(duration = 900, id, code, tags, use = FALSE, ...) 
     if (isTRUE(use)) {
         set_credentials(out)
     }
-    out
+    invisible(out)
 }
 
 #' @rdname STS
@@ -247,6 +247,8 @@ save_credentials <- function() {
 #' @rdname credentials
 #' @export
 set_credentials <- function(credentials, save.previous=TRUE) {
+    if (!is.null(credentials) && !is.list(credentials))
+        stop("invalid credentials, must be a list")
     if (save.previous) save_credentials()
     v <- sapply(names(.cred.vars), function(e) {
         v <- credentials[[e]]
