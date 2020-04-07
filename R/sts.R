@@ -1,16 +1,40 @@
 #' @rdname STS
 #' @title Temporary Session Tokens
 #' @description Get a temporary credentials (i.e., a Session Token)
-#' @param role A character string containing a role ARN or an object of class \dQuote{iam_role}.
-#' @param session A character string specifying the name of the temporary session.
-#' @param duration A numeric value specifying a duration that the credentials should be valid, in seconds, between 900 and 129600.
-#' @param id Optionally, the serial number or Amazon Resource Number for a multi-factor authentication (MFA) device.
+#' @param role string, role ARN or an object of class \dQuote{iam_role}.
+#' @param session string, name of the temporary session, can be
+#'     arbitrary and is mainly used to disambiguate multiple sessions
+#'     using the same role.
+#' @param duration numeric, optional, duration for which the
+#'     credentials should be valid, in seconds, between 900 and
+#'     129600. If not set, the back-end can decided.
+#' @param id string, optional, the serial number or Amazon Resource
+#'     Number for a multi-factor authentication (MFA) device.
 #' @param code If \code{id} is specified, the value provided by the MFA device.
-#' @param policy A character string specifying a JSON-formatted role policy. For \code{assume_role}, if \code{role} is an object of class \dQuote{iam_role}, this will be inferred automatically.
-#' @param use A logical (default \code{FALSE}), specifying whether to use these credentials for subsequent requests. If \code{TRUE}, any currently used credentials are stored in a package environment (if no credentials are already stored; in that case, the request will fail) and the requested tokens overwrite them in the relevant environment variables. \code{restore_credentials()} can then be used to reset environment variables based on those from the saved environment; \code{delete_saved_credentials()} deletes the credentials without restoring them.
+#' @param policy A character string specifying a JSON-formatted role
+#'     policy. For \code{assume_role}, if \code{role} is an object of
+#'     class \dQuote{iam_role}, this will be inferred automatically.
+#' @param use logical (default \code{FALSE}), specifying whether to
+#'     use these credentials for subsequent requests. If \code{TRUE},
+#'     any currently used credentials are stored in a package
+#'     environment (see \code{\link{save_credentials}}) and the
+#'     requested tokens overwrite them in the relevant environment
+#'     variables. \code{\link{restore_credentials}()} can then be used
+#'     to restore environment variables based on those from the saved
+#'     environment and \code{\link{delete_saved_credentials}()} deletes
+#'     the credentials without restoring them.
 #' @template stsdots
 #' @return A list.
-#' @details \code{get_caller_identity} returns the account ID and ARN for the currently credentialled user; this can be used to confirm that an assumed role has indeed been assumed. \code{get_session_token} and \code{get_federation_token} generate and return temporary credentials. Details about the underlying behavior of the various API endpoints can be found at \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html}{Requesting Temporary Security Credentials}.
+#' @details \code{get_caller_identity} returns the account ID and ARN
+#'     for the currently credentialled user. This can be used to
+#'     confirm that an assumed role has indeed been assumed.
+#'
+#'     \code{get_session_token} and \code{get_federation_token}
+#'     generate and return temporary credentials.
+#'
+#'     Details about the underlying behavior of the various API
+#'     endpoints can be found at
+#'     \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html}{Requesting Temporary Security Credentials}.
 #' @references
 #'  \href{http://docs.aws.amazon.com/STS/latest/APIReference/API_GetCallerIdentity.html}{API Reference: GetCallerIdentity}
 #'  \href{http://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html}{API Reference: GetSessionToken}
@@ -21,17 +45,24 @@
 #' @examples
 #' \dontrun{
 #' get_caller_identity() # check current identity
-#' get_session_token() # get token but do not use
+#'
+#' x <- get_session_token() # get token (T1) but do not use
+#' set_credentials(x)       # now use those credentials
 #' 
-#' x <- get_session_token(use = TRUE) # use temp token
+#' x <- get_session_token(use = TRUE) # get and use another temp token (T2)
 #' get_caller_identity() # check that token is in use
+#'
+#' # assume a role
+#' r <- assume_role("arn:aws:iam::111111111111:role/my-role", "test", use=TRUE)
+#' get_caller_identity() # check that the role has been assumed
 #' 
-#' restore_credentials() # return to original credentials
+#' restore_credentials() # return to credentials of T2
+#' restore_credentials() # return to credentials of T1
+#' restore_credentials() # return to root credentials
 #' get_caller_identity() # check identity, again
 #' }
 #' @export
 get_session_token <- function(duration = 900, id, code, use = FALSE, ...) {
-    check_saved_credentials(use)
     query <- list(Action = "GetSessionToken")
     if (duration < 900 | duration > 129600) {
         stop("'duration' must be a value in seconds between 900 and 129600")
@@ -55,7 +86,6 @@ get_session_token <- function(duration = 900, id, code, use = FALSE, ...) {
 #' @param name The name of the federated user.
 #' @export
 get_federation_token <- function(duration = 900, name, policy, use = FALSE, ...) {
-    check_saved_credentials(use)
     query <- list(Action = "GetFederationToken")
     if (duration < 900 | duration > 129600) {
         stop("'duration' must be a value in seconds between 900 and 129600")
@@ -90,13 +120,13 @@ get_caller_identity <- function(...) {
 #' @rdname STS
 #' @param externalid A unique identifier that is used by third parties when assuming roles in their customers' accounts.
 #' @export
-assume_role <- function(role, session, duration = 900, id, code, externalid, policy, use = FALSE, ...) {
-    check_saved_credentials(use)
+assume_role <- function(role, session, duration, id, code, externalid, policy, use = FALSE, ...) {
     query <- list(Action = "AssumeRole", RoleArn = get_rolearn(role))
-    if (duration < 900 | duration > 129600) {
-        stop("'duration' must be a value in seconds between 900 and 129600")
+    if (!missing(duration)) {
+        if (duration < 900 || duration > 129600)
+            stop("'duration' must be a value in seconds between 900 and 129600")
+        query[["DurationSeconds"]] <- duration
     }
-    query[["DurationSeconds"]] <- duration
     query[["RoleSessionName"]] <- session
     if (!missing(id)) {
         query[["SerialNumber"]] <- id
@@ -123,60 +153,118 @@ assume_role <- function(role, session, duration = 900, id, code, externalid, pol
     out
 }
 
-saved_env_vars <- list2env(list(SAVED = FALSE))
+.saved <- new.env(parent=emptyenv())
 
-check_saved_credentials <- function(use = TRUE) {
-    if (isTRUE(use)) {
-        if (isTRUE(saved_env_vars[["SAVED"]])) {
-            stop("Saved credentials have not been restored.\nUse 'restore_credentials()' to restore them, or 'delete_saved_credentials()' to clear them.")
-        }
-    }
-    return(TRUE)
-}
 
+## which variables to save/restore, names correspond to the AWS API names, values to env var names
+.cred.vars <- c(AccessKeyId="AWS_ACCESS_KEY_ID", SecretAccessKey="AWS_SECRET_ACCESS_KEY", SessionToken="AWS_SESSION_TOKEN")
+
+#' @rdname credentials
+#' @title Save/restore/manage session credentials
+#' @description The following functions manage the environment
+#'     variables \code{AWS_ACCESS_KEY_ID},
+#'     \code{AWS_SECRET_ACCESS_KEY} and \code{AWS_SESSION_TOKEN} used
+#'     for credentials for all AWS API calls.
+#'
+#'     \code{save_credentials} saves the current credentials to a
+#'     stack of credentials kept in the session. Always returns
+#'     \code{TRUE}.
+#' 
+#'     \code{restore_credentials} restores the last saved credentials
+#'     and pops them off the stack.
+#' 
+#'     \code{delete_saved_credentials} removes the last saved
+#'     credentials without using them.
+#'
+#'     \code{set_credentials} uses credentials list as supplied by the
+#'     REST API and makes them current by assigning their values to
+#'     the corresponding \code{AWS_*} environment variables. If
+#'     \code{save.previous} is \code{TRUE} then the currently used
+#'     credentials are first saved on the stack ebfore being replaced
+#'     with the new ones.
+#'
+#'     Most functions in the \code{STS} section call
+#'     \code{set_credentials()} automatically if \code{use = TRUE} is
+#'     set.
+#' @param credentials list, credentials as received from the REST API
+#'     call, they should contain to following elements:
+#'     \code{AccessKeyId}, \code{SecretAccessKey} and
+#'     \code{SessionToken})
+#' @param save.previous logical, if \code{TRUE} the current
+#'     credentials are saved first using \code{save_credentials}
+#'     before the new credentials are applied.
+#' @param all logical, if \code{TRUE} then removes all credentials
+#'     from the stack, otherwise only the last ones.
+#' @param pop logical, if \code{TRUE} then the credentials are
+#'     restored and then removed from the stack.
+#' @param root logical, if \code{FALSE} then last saved credentials
+#'     are used. if \code{TRUE} then goes down the stack to the first
+#'     saved credentials. If both \code{root} and \code{pop} are
+#'     \code{TRUE} then all credentials are removed from the stack.
+#' @details Since \code{aws.iam} version 0.1.8 the credentials are
+#'     kept on a stack, so it is possible to use
+#'     \code{save_credentials()} several times without restoring
+#'     them. This allows role chaining. At the end of a chained
+#'     session it is possible to get back to the main credentials using
+#'     \code{restore_credentials(pop=TRUE, root=TRUE)}.
+#' @export
 save_credentials <- function() {
-    saved_env_vars[["SAVED"]] <- TRUE
-    saved_env_vars[["AWS_ACCESS_KEY_ID"]] <- Sys.getenv("AWS_ACCESS_KEY_ID")
-    saved_env_vars[["AWS_SECRET_ACCESS_KEY"]] <- Sys.getenv("AWS_SECRET_ACCESS_KEY")
-    saved_env_vars[["AWS_SESSION_TOKEN"]] <- Sys.getenv("AWS_SESSION_TOKEN")
-    return(TRUE)
+    .cred <- sapply(.cred.vars, Sys.getenv)
+    if (is.null(.saved$cred)) .saved$cred <- list(.cred) else .saved$cred <- list(.cred, .next=.saved$cred)
+    TRUE
 }
 
-set_credentials <- function(credentials) {
-    save_credentials()
-    if ("AccessKeyId" %in% names(credentials)) {
-        Sys.setenv("AWS_ACCESS_KEY_ID" = credentials[["AccessKeyId"]])
-    }
-    if ("SecretAccessKey" %in% names(credentials)) {
-        Sys.setenv("AWS_SECRET_ACCESS_KEY" = credentials[["SecretAccessKey"]])
-    }
-    if ("SessionToken" %in% names(credentials)) {
-        Sys.setenv("AWS_SESSION_TOKEN" = credentials[["SessionToken"]])
-    }
-    return(TRUE)
-}
-
-#' @rdname STS
+#' @rdname credentials
 #' @export
-delete_saved_credentials <- function() {
-    saved_env_vars[["SAVED"]] <- FALSE
-    saved_env_vars[["AWS_ACCESS_KEY_ID"]] <- NA_character_
-    saved_env_vars[["AWS_SECRET_ACCESS_KEY"]] <- NA_character_
-    saved_env_vars[["AWS_SESSION_TOKEN"]] <- NA_character_
-    return(TRUE)
+set_credentials <- function(credentials, save.previous=TRUE) {
+    if (save.previous) save_credentials()
+    v <- sapply(names(.cred.vars), function(e) {
+        v <- credentials[[e]]
+        if (is.null(v)) "" else v
+    })
+    names(v) <- .cred.vars
+    do.call(Sys.setenv, as.list(v))
+    TRUE
 }
 
-#' @rdname STS
+#' @rdname credentials
 #' @export
-restore_credentials <- function() {
-    reset_from_env <- function(x) {
-        if (!is.na(saved_env_vars[[x]])) {
-            do.call("Sys.setenv", `names<-`(list(saved_env_vars[[x]]), x))
+delete_saved_credentials <- function(all=FALSE) {
+    if (all) {
+        .saved$cred <- NULL
+        TRUE
+    } else {
+        .cred <- .saved$cred
+        if (is.null(.cred)) {
+            warning("There are no saved credentials")
+            FALSE
+        } else {
+            .saved$cred <- .cred$.next
+            TRUE
         }
     }
-    reset_from_env("AWS_ACCESS_KEY_ID")
-    reset_from_env("AWS_SECRET_ACCESS_KEY")
-    reset_from_env("AWS_SESSION_TOKEN")
-    delete_saved_credentials()
-    return(TRUE)
+}
+
+#' @rdname credentials
+#' @export
+restore_credentials <- function(pop=TRUE, root=FALSE) {
+    .cred <- .saved$cred
+    if (is.null(.cred)) {
+        warning("There are no saved credentials, no change")
+        FALSE
+    } else {
+        if (root) {
+            ## go down to the root
+            while (!is.null(.cred$.next))
+                .cred <- .cred$.next
+
+            ## if popping then remove everything except the root
+            if (pop)
+                .saved$cred <- .cred
+        }
+        vars <- .cred[[1]]
+        names(vars) <- .cred.vars
+        do.call(Sys.setenv, as.list(vars))
+        if (pop) delete_saved_credentials() else TRUE
+    }
 }
