@@ -14,6 +14,12 @@
 #' @param policy A character string specifying a JSON-formatted role
 #'     policy. For \code{assume_role}, if \code{role} is an object of
 #'     class \dQuote{iam_role}, this will be inferred automatically.
+#' @param tags named character vector or named list of scalars,
+#'     optional, if specified then the supplied key/value pairs (names
+#'     are keys) are passed as session tags.
+#' @param transitive.tags character vector, optional, specifies names
+#'     of the session tags which will be passed to subsequent sessions
+#'     in the role chain.
 #' @param use logical (default \code{FALSE}), specifying whether to
 #'     use these credentials for subsequent requests. If \code{TRUE},
 #'     any currently used credentials are stored in a package
@@ -62,7 +68,7 @@
 #' get_caller_identity() # check identity, again
 #' }
 #' @export
-get_session_token <- function(duration = 900, id, code, use = FALSE, ...) {
+get_session_token <- function(duration = 900, id, code, tags, use = FALSE, ...) {
     query <- list(Action = "GetSessionToken")
     if (duration < 900 | duration > 129600) {
         stop("'duration' must be a value in seconds between 900 and 129600")
@@ -72,6 +78,8 @@ get_session_token <- function(duration = 900, id, code, use = FALSE, ...) {
         query[["SerialNumber"]] <- id
         query[["TokenCode"]] <- code
     }
+    if (!missing(tags))
+        query <- c(query, .mk.tags.query("Tags", tags))
     out <- stsHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
         out <- out[["GetSessionTokenResponse"]][["GetSessionTokenResult"]][["Credentials"]]
@@ -117,10 +125,28 @@ get_caller_identity <- function(...) {
     out
 }
 
+## Creates query string entries for tags (<prefix>.member.<n>.Key=/.Value=)
+## and arrays (<prefix>.member.<n>=)
+## only one of v or array must be populated
+.mk.tags.query <- function(prefix, v, array) {
+    if (missing(v) && !missing(array)) {
+        array <- as.character(array)
+        names(array) <- paste0(prefix, ".member.", seq_along(array))
+        as.list(array)
+    } else {
+        keys <- names(v)
+        vals <- as.character(v)
+        names(keys) <- paste0(prefix, ".member.", seq_along(keys), ".Key")
+        names(vals) <- paste0(prefix, ".member.", seq_along(vals), ".Value")
+        as.list(c(keys, vals))
+    }
+}
+
 #' @rdname STS
 #' @param externalid A unique identifier that is used by third parties when assuming roles in their customers' accounts.
 #' @export
-assume_role <- function(role, session, duration, id, code, externalid, policy, use = FALSE, ...) {
+assume_role <- function(role, session, duration, id, code, externalid,
+                        policy, tags, transitive.tags, use = FALSE, ...) {
     query <- list(Action = "AssumeRole", RoleArn = get_rolearn(role))
     if (!missing(duration)) {
         if (duration < 900 || duration > 129600)
@@ -132,6 +158,10 @@ assume_role <- function(role, session, duration, id, code, externalid, policy, u
         query[["SerialNumber"]] <- id
         query[["TokenCode"]] <- code
     }
+    if (!missing(tags))
+        query <- c(query, .mk.tags.query("Tags", tags))
+    if (!missing(transitive.tags))
+        query <- c(query, .mk.tags.query("TransitiveTagKeys", array=transitive.tags))
     if (!missing(externalid)) {
         query[["ExternalId"]] <- externalid
     }
