@@ -5,11 +5,9 @@
 \alias{get_federation_token}
 \alias{get_caller_identity}
 \alias{assume_role}
-\alias{delete_saved_credentials}
-\alias{restore_credentials}
 \title{Temporary Session Tokens}
 \usage{
-get_session_token(duration = 900, id, code, use = FALSE, ...)
+get_session_token(duration = 900, id, code, tags, use = FALSE, ...)
 
 get_federation_token(duration = 900, name, policy, use = FALSE, ...)
 
@@ -18,39 +16,60 @@ get_caller_identity(...)
 assume_role(
   role,
   session,
-  duration = 900,
+  duration,
   id,
   code,
   externalid,
   policy,
+  tags,
+  transitive.tags,
   use = FALSE,
   ...
 )
-
-delete_saved_credentials()
-
-restore_credentials()
 }
 \arguments{
-\item{duration}{A numeric value specifying a duration that the credentials should be valid, in seconds, between 900 and 129600.}
+\item{duration}{numeric, optional, duration for which the
+credentials should be valid, in seconds, between 900 and
+129600. If not set, the back-end can decided.}
 
-\item{id}{Optionally, the serial number or Amazon Resource Number for a multi-factor authentication (MFA) device.}
+\item{id}{string, optional, the serial number or Amazon Resource
+Number for a multi-factor authentication (MFA) device.}
 
 \item{code}{If \code{id} is specified, the value provided by the MFA device.}
 
-\item{use}{A logical (default \code{FALSE}), specifying whether to use these credentials for subsequent requests. If \code{TRUE}, any currently used credentials are stored in a package environment (if no credentials are already stored; in that case, the request will fail) and the requested tokens overwrite them in the relevant environment variables. \code{restore_credentials()} can then be used to reset environment variables based on those from the saved environment; \code{delete_saved_credentials()} deletes the credentials without restoring them.}
+\item{tags}{named character vector or named list of scalars,
+optional, if specified then the supplied key/value pairs (names
+are keys) are passed as session tags.}
+
+\item{use}{logical (default \code{FALSE}), specifying whether to
+use these credentials for subsequent requests. If \code{TRUE},
+any currently used credentials are stored in a package
+environment (see \code{\link{save_credentials}}) and the
+requested tokens overwrite them in the relevant environment
+variables. \code{\link{restore_credentials}()} can then be used
+to restore environment variables based on those from the saved
+environment and \code{\link{delete_saved_credentials}()} deletes
+the credentials without restoring them.}
 
 \item{\dots}{Additional arguments passed to \code{\link{stsHTTP}}.}
 
 \item{name}{The name of the federated user.}
 
-\item{policy}{A character string specifying a JSON-formatted role policy. For \code{assume_role}, if \code{role} is an object of class \dQuote{iam_role}, this will be inferred automatically.}
+\item{policy}{A character string specifying a JSON-formatted role
+policy. For \code{assume_role}, if \code{role} is an object of
+class \dQuote{iam_role}, this will be inferred automatically.}
 
-\item{role}{A character string containing a role ARN or an object of class \dQuote{iam_role}.}
+\item{role}{string, role ARN or an object of class \dQuote{iam_role}.}
 
-\item{session}{A character string specifying the name of the temporary session.}
+\item{session}{string, name of the temporary session, can be
+arbitrary and is mainly used to disambiguate multiple sessions
+using the same role.}
 
 \item{externalid}{A unique identifier that is used by third parties when assuming roles in their customers' accounts.}
+
+\item{transitive.tags}{character vector, optional, specifies names
+of the session tags which will be passed to subsequent sessions
+in the role chain.}
 }
 \value{
 A list.
@@ -59,17 +78,34 @@ A list.
 Get a temporary credentials (i.e., a Session Token)
 }
 \details{
-\code{get_caller_identity} returns the account ID and ARN for the currently credentialled user; this can be used to confirm that an assumed role has indeed been assumed. \code{get_session_token} and \code{get_federation_token} generate and return temporary credentials. Details about the underlying behavior of the various API endpoints can be found at \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html}{Requesting Temporary Security Credentials}.
+\code{get_caller_identity} returns the account ID and ARN
+    for the currently credentialled user. This can be used to
+    confirm that an assumed role has indeed been assumed.
+
+    \code{get_session_token} and \code{get_federation_token}
+    generate and return temporary credentials.
+
+    Details about the underlying behavior of the various API
+    endpoints can be found at
+    \href{http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html}{Requesting Temporary Security Credentials}.
 }
 \examples{
 \dontrun{
 get_caller_identity() # check current identity
-get_session_token() # get token but do not use
 
-x <- get_session_token(use = TRUE) # use temp token
+x <- get_session_token() # get token (T1) but do not use
+set_credentials(x)       # now use those credentials
+
+x <- get_session_token(use = TRUE) # get and use another temp token (T2)
 get_caller_identity() # check that token is in use
 
-restore_credentials() # return to original credentials
+# assume a role
+r <- assume_role("arn:aws:iam::111111111111:role/my-role", "test", use=TRUE)
+get_caller_identity() # check that the role has been assumed
+
+restore_credentials() # return to credentials of T2
+restore_credentials() # return to credentials of T1
+restore_credentials() # return to root credentials
 get_caller_identity() # check identity, again
 }
 }
