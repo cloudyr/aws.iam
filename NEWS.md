@@ -1,4 +1,6 @@
-## aws.aim 0.1.8
+## aws.iam 0.1.9 (under development)
+
+## aws.iam 0.1.8
 
 * Fixed missing `location_credentials` import (#14)
 * Added support for session tags via `tags` and `transitive.tags` parameters.
