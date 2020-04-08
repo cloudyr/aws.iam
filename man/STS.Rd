@@ -9,7 +9,14 @@
 \usage{
 get_session_token(duration = 900, id, code, tags, use = FALSE, ...)
 
-get_federation_token(duration = 900, name, policy, use = FALSE, ...)
+get_federation_token(
+  duration = 900,
+  name,
+  policy,
+  policy_arns,
+  use = FALSE,
+  ...
+)
 
 get_caller_identity(...)
 
@@ -55,9 +62,16 @@ the credentials without restoring them.}
 
 \item{name}{The name of the federated user.}
 
-\item{policy}{A character string specifying a JSON-formatted role
-policy. For \code{assume_role}, if \code{role} is an object of
-class \dQuote{iam_role}, this will be inferred automatically.}
+\item{policy}{string, optional, specifying a JSON-formatted inline
+session policy. Note that for \code{get_federation_token} this
+entry is practically mandatory (unless \code{policy_arns} is
+used), since not specifying a policy results in a session
+without any permissions. Conversely, for \code{assume_role} the
+policy can only restrict what is already granted by the role's
+policy thus is rarely needed.}
+
+\item{policy_arns}{character vector, optional, list of ARNs of IAM
+managed policies to use as session policy.}
 
 \item{role}{string, role ARN or an object of class \dQuote{iam_role}.}
 
@@ -96,17 +110,19 @@ get_caller_identity() # check current identity
 x <- get_session_token() # get token (T1) but do not use
 set_credentials(x)       # now use those credentials
 
-x <- get_session_token(use = TRUE) # get and use another temp token (T2)
-get_caller_identity() # check that token is in use
-
 # assume a role
 r <- assume_role("arn:aws:iam::111111111111:role/my-role", "test", use=TRUE)
 get_caller_identity() # check that the role has been assumed
 
-restore_credentials() # return to credentials of T2
 restore_credentials() # return to credentials of T1
 restore_credentials() # return to root credentials
 get_caller_identity() # check identity, again
+
+get_federation_token(name="Bob",
+    policy_arns="arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
+    use=TRUE)
+aws.s3::bucketlist()
+restore_credentials() # back to root
 }
 }
 \references{
