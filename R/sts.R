@@ -13,10 +13,13 @@
 #' @param code If \code{id} is specified, the value provided by the MFA device.
 #' @param policy string, optional, specifying a JSON-formatted inline
 #'     session policy. Note that for \code{get_federation_token} this
-#'     entry is practically mandatory, since not specifying a policy
-#'     results in a session without any permissions. Conversely, for
-#'     \code{assume_role} the policy can only restrict what is already
-#'     granted by the role's policy thus is rarely needed.
+#'     entry is practically mandatory (unless \code{policy_arns} is
+#'     used), since not specifying a policy results in a session
+#'     without any permissions. Conversely, for \code{assume_role} the
+#'     policy can only restrict what is already granted by the role's
+#'     policy thus is rarely needed.
+#' @param policy_arns character vector, optional, list of ARNs of IAM
+#'     managed policies to use as session policy.
 #' @param tags named character vector or named list of scalars,
 #'     optional, if specified then the supplied key/value pairs (names
 #'     are keys) are passed as session tags.
@@ -58,17 +61,19 @@
 #' x <- get_session_token() # get token (T1) but do not use
 #' set_credentials(x)       # now use those credentials
 #' 
-#' x <- get_session_token(use = TRUE) # get and use another temp token (T2)
-#' get_caller_identity() # check that token is in use
-#'
 #' # assume a role
 #' r <- assume_role("arn:aws:iam::111111111111:role/my-role", "test", use=TRUE)
 #' get_caller_identity() # check that the role has been assumed
 #' 
-#' restore_credentials() # return to credentials of T2
 #' restore_credentials() # return to credentials of T1
 #' restore_credentials() # return to root credentials
 #' get_caller_identity() # check identity, again
+#'
+#' get_federation_token(name="Bob",
+#'     policy_arns="arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
+#'     use=TRUE)
+#' aws.s3::bucketlist()
+#' restore_credentials() # back to root
 #' }
 #' @export
 get_session_token <- function(duration = 900, id, code, tags, use = FALSE, ...) {
@@ -96,7 +101,7 @@ get_session_token <- function(duration = 900, id, code, tags, use = FALSE, ...) 
 #' @rdname STS
 #' @param name The name of the federated user.
 #' @export
-get_federation_token <- function(duration = 900, name, policy, use = FALSE, ...) {
+get_federation_token <- function(duration = 900, name, policy, policy_arns, use = FALSE, ...) {
     query <- list(Action = "GetFederationToken")
     if (duration < 900 | duration > 129600) {
         stop("'duration' must be a value in seconds between 900 and 129600")
@@ -105,6 +110,9 @@ get_federation_token <- function(duration = 900, name, policy, use = FALSE, ...)
     query[["Name"]] <- name
     if (!missing(policy)) {
         query[["Policy"]] <- policy
+    }
+    if (!missing(policy_arns)) {
+        query <- c(query, .mk.tags.query("PolicyArns", array=policy_arns, suffix=".arn"))
     }
     out <- stsHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
@@ -129,12 +137,12 @@ get_caller_identity <- function(...) {
 }
 
 ## Creates query string entries for tags (<prefix>.member.<n>.Key=/.Value=)
-## and arrays (<prefix>.member.<n>=)
+## and arrays (<prefix>.member.<n><suffix>=)
 ## only one of v or array must be populated
-.mk.tags.query <- function(prefix, v, array) {
+.mk.tags.query <- function(prefix, v, array, suffix='') {
     if (missing(v) && !missing(array)) {
         array <- as.character(array)
-        names(array) <- paste0(prefix, ".member.", seq_along(array))
+        names(array) <- paste0(prefix, ".member.", seq_along(array), suffix)
         as.list(array)
     } else {
         keys <- names(v)
