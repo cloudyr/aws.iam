@@ -11,9 +11,12 @@
 #' @param id string, optional, the serial number or Amazon Resource
 #'     Number for a multi-factor authentication (MFA) device.
 #' @param code If \code{id} is specified, the value provided by the MFA device.
-#' @param policy A character string specifying a JSON-formatted role
-#'     policy. For \code{assume_role}, if \code{role} is an object of
-#'     class \dQuote{iam_role}, this will be inferred automatically.
+#' @param policy string, optional, specifying a JSON-formatted inline
+#'     session policy. Note that for \code{get_federation_token} this
+#'     entry is practically mandatory, since not specifying a policy
+#'     results in a session without any permissions. Conversely, for
+#'     \code{assume_role} the policy can only restrict what is already
+#'     granted by the role's policy thus is rarely needed.
 #' @param tags named character vector or named list of scalars,
 #'     optional, if specified then the supplied key/value pairs (names
 #'     are keys) are passed as session tags.
@@ -165,12 +168,8 @@ assume_role <- function(role, session, duration, id, code, externalid,
     if (!missing(externalid)) {
         query[["ExternalId"]] <- externalid
     }
-    if (inherits(role, "iam_role") | !missing(policy)) {
-        if (inherits(role, "iam_role")) {
-            query[["Policy"]] <- role[["AssumeRolePolicyDocument"]]
-        } else {
-            query[["Policy"]] <- policy
-        }
+    if (!missing(policy)) {
+        query[["Policy"]] <- policy
     }
     out <- stsHTTP(query = query, ...)
     if (!inherits(out, "aws_error")) {
