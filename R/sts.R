@@ -256,6 +256,11 @@ save_credentials <- function() {
 set_credentials <- function(credentials, save.previous=TRUE) {
     if (!is.null(credentials) && !is.list(credentials))
         stop("invalid credentials, must be a list")
+    ## This is quite a hack - aws.signature::locate_credentials() doesn't return
+    ## a valid AWS object, but makes up its own names, so we are trying to detect
+    ## that case an re-map it since it is quite likely that users will try to use it.
+    if (identical(names(credentials), c("key", "secret", "session_token", "region")))
+        names(credentials)[1:3] <- .cred.vars
     if (save.previous) save_credentials()
     v <- sapply(names(.cred.vars), function(e) {
         v <- credentials[[e]]
