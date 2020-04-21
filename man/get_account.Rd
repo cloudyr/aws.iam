@@ -33,7 +33,7 @@ Retrieve IAM Account Details. This is useful as a \dQuote{hello world!} test.
 \examples{
 \dontrun{
 # account details
-get_aaccount()
+get_account()
 
 # big list of authorizations
 auth_details()
