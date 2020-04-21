@@ -7,7 +7,7 @@
 #' @examples
 #' \dontrun{
 #' # account details
-#' get_aaccount()
+#' get_account()
 #' 
 #' # big list of authorizations
 #' auth_details()
